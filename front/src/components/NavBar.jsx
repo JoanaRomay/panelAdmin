@@ -15,7 +15,7 @@ export default function NavBar() {
                     </Link>
                     <Link to="/usuarios" className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-orange-300 dark:text-gray-300 dark:hover:text-white">
                       <Users className="h-5 w-5 mr-1" />
-                      Usuarios
+                      Productos
                     </Link>
                     <Link to="/categorias" className="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-orange-300 dark:text-gray-300 dark:hover:text-white">
                       <Tag className="h-5 w-5 mr-1" />
