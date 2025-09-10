@@ -1,17 +1,15 @@
 import NavBar from "../components/NavBar"
 import SideBar from "../components/SideBar"
 
+
 function Productos() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Navbar arriba */}
       <NavBar />
 
       <div className="flex flex-1">
-        {/* Sidebar lateral */}
         <SideBar />
 
-        {/* Contenido principal */}
               <main className="flex-1 bg-amber-950 p-6 overflow-y-auto">
                   <div className="flex justify-between items-center">
                       <h2 className="text-white text-3xl font-bold leading-none">Productos</h2>
