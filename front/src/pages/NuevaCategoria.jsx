@@ -1,0 +1,92 @@
+import NavBar from "../components/NavBar"
+import SideBar from "../components/SideBar"
+import { useNavigate } from "react-router-dom"
+
+
+function NuevaCategoria() {
+
+     const navigate = useNavigate();
+ const irAtras = () => {
+    navigate('/categorias')
+  }
+  return (
+    <div className="flex flex-col min-h-screen">
+      <NavBar />
+
+      <div className="flex flex-1">
+        <SideBar />
+
+              <main className="flex-1 bg-amber-950 p-6 overflow-y-auto">
+                  <div className="flex justify-between items-center">
+                      <h2 className="text-white text-3xl font-bold leading-none">Crear Categoria</h2>
+                      <button onClick={irAtras} className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+                         
+                                     atras
+                      </button>
+                  </div>
+
+                  <div className="max-w-2xl space-y-6">
+  <form className="space-y-6">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+      <div className="px-6 py-4 border-b border-gray-100">
+        <h2 className="text-lg font-semibold">Información de la Categoría</h2>
+        <p className="text-sm text-gray-500">
+          Completa los datos básicos de la nueva categoría
+        </p>
+      </div>
+      <div className="px-6 py-4 space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-1">Nombre de la Categoría</label>
+          <input
+            type="text"
+            placeholder="Ej: Electrónicos"
+            className="w-full rounded-2xl border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Descripción</label>
+          <textarea
+            placeholder="Describe qué tipo de productos incluye esta categoría..."
+            rows={3}
+            className="w-full rounded-2xl border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-1">Estado</label>
+          <select className="w-full rounded-2xl border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div className="flex justify-end gap-4">
+      <button
+        type="button"
+        className="px-4 py-2 border rounded-2xl text-sm text-gray-700 hover:bg-gray-100"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        className="px-4 py-2 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold hover:opacity-90"
+      >
+        Crear Categoría
+      </button>
+    </div>
+  </form>
+</div>
+
+
+
+           
+        </main>
+      </div>
+    </div>
+  )
+}
+
+export default NuevaCategoria
