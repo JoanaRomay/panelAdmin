@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import categoriaService from "../services/categoriaService";
-import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
+import { MoreHorizontal, Edit, Trash2, RotateCw} from "lucide-react";
 
 function Categorias() {
   const navigate = useNavigate();
@@ -47,12 +47,25 @@ function Categorias() {
   }, []);
 
   // Manejo de eliminar categoría
-  const handleDelete = (id, nombre) => {
-    if (window.confirm(`¿Desea eliminar la categoría "${nombre}"?`)) {
-      // Aquí llamás a tu servicio de delete
-      console.log("Eliminar categoría:", id);
-    }
-  };
+  const handleDelete = async (categoria) => {
+  if (!categoria?.id) return;
+
+  if (!window.confirm(`¿Desea eliminar la categoría "${categoria.nombre}"?`)) return;
+
+  try {
+    // ✅ Esto elimina en la base de datos
+    await categoriaService.delete(categoria.id);
+
+    // Actualiza la tabla en la UI
+    setCategorias((prev) => prev.filter((c) => c.id !== categoria.id));
+
+    alert("Categoría eliminada correctamente");
+  } catch (error) {
+    console.error("Error al eliminar la categoría:", error);
+    alert("No se pudo eliminar la categoría");
+  }
+};
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -140,32 +153,25 @@ function Categorias() {
                           </span>
                         </td>
                         <td className="py-3 text-gray-700">{new Date(categoria.createdAt).toLocaleDateString()}</td>
-                        <td className="py-3 text-right" ref={dropdownRef}>
-                          <button
-                            onClick={() => toggleDropdown(categoria.id)}
-                            className="inline-flex items-center justify-center h-8 w-8 p-0 rounded-md hover:bg-gray-50"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                          </button>
+                       <td className="py-3 text-right">
+  <div className="flex justify-end space-x-2">
+    <button
+            onClick={() => handleOpenModal(categoria)}
+            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+            title="Editar"
+         >
+        <Edit className="h-5 w-5" />
+   </button>
+   <button
+        onClick={() => handleDelete(categoria)}
+        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+       title="Eliminar"
+    >
+    <Trash2 className="h-5 w-5" />
+    </button>
+   </div>
+  </td>
 
-                          {openDropdownId === categoria.id && (
-                            <div className="absolute right-0 mt-1 bg-white border border-gray-200 rounded shadow-md z-10">
-                              <Link to={`/admin/categories/${categoria.id}/edit`}>
-                                <div className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer">
-                                  <Edit className="h-4 w-4" />
-                                  Editar
-                                </div>
-                              </Link>
-                              <div
-                                onClick={() => handleDelete(categoria.id, categoria.nombre)}
-                                className="flex items-center gap-2 px-3 py-2 hover:bg-red-100 text-red-600 cursor-pointer"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                Eliminar
-                              </div>
-                            </div>
-                          )}
-                        </td>
                       </tr>
                     ))}
                   </tbody>
