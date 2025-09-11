@@ -1,30 +1,57 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import categoriaService from "../services/categoriaService";
+import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 
 function Categorias() {
   const navigate = useNavigate();
   const [categorias, setCategorias] = useState([]);
   const [search, setSearch] = useState("");
+  const [openDropdownId, setOpenDropdownId] = useState(null); // ID de la fila cuyo dropdown está abierto
+  const dropdownRef = useRef();
 
   // Traer categorías del backend
   useEffect(() => {
     const fetchCategorias = async () => {
       try {
-        const res = await categoriaService.getAll({ search, aactiva: "all" });
-        setCategorias(res.data.data); // data es el array de categorías
+        const res = await categoriaService.getAll({ search, activa: "all" });
+        setCategorias(res.data.data);
       } catch (err) {
         console.error("Error al obtener categorías:", err);
       }
     };
-
     fetchCategorias();
   }, [search]);
 
+  // Maneja navegación a nueva categoría
   const irANuevaCategoria = () => {
     navigate('/categorias/nuevaCategoria');
+  };
+
+  // Abrir/cerrar dropdown
+  const toggleDropdown = (id) => {
+    setOpenDropdownId(openDropdownId === id ? null : id);
+  };
+
+  // Cerrar dropdown al hacer click fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdownId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Manejo de eliminar categoría
+  const handleDelete = (id, nombre) => {
+    if (window.confirm(`¿Desea eliminar la categoría "${nombre}"?`)) {
+      // Aquí llamás a tu servicio de delete
+      console.log("Eliminar categoría:", id);
+    }
   };
 
   return (
@@ -55,7 +82,6 @@ function Categorias() {
 
           <div className="space-y-6 mt-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-              {/* CardHeader */}
               <div className="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                   <h3 className="text-lg font-semibold">Todas las Categorías</h3>
@@ -83,7 +109,6 @@ function Categorias() {
                 </div>
               </div>
 
-              {/* CardContent / Tabla */}
               <div className="px-6 py-4 overflow-x-auto">
                 <table className="w-full min-w-[700px] divide-y divide-gray-100">
                   <thead className="bg-transparent">
@@ -97,7 +122,7 @@ function Categorias() {
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
                     {categorias.map((categoria) => (
-                      <tr key={categoria.id} className="hover:bg-gray-50">
+                      <tr key={categoria.id} className="hover:bg-gray-50 relative">
                         <td className="py-3">
                           <div className="font-medium text-gray-900">{categoria.nombre}</div>
                           <div className="text-xs text-gray-500">ID: {categoria.id}</div>
@@ -115,12 +140,31 @@ function Categorias() {
                           </span>
                         </td>
                         <td className="py-3 text-gray-700">{new Date(categoria.createdAt).toLocaleDateString()}</td>
-                        <td className="py-3 text-right">
-                          <button className="inline-flex items-center justify-center h-8 w-8 p-0 rounded-md hover:bg-gray-50">
-                            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6h.01M12 12h.01M12 18h.01" />
-                            </svg>
+                        <td className="py-3 text-right" ref={dropdownRef}>
+                          <button
+                            onClick={() => toggleDropdown(categoria.id)}
+                            className="inline-flex items-center justify-center h-8 w-8 p-0 rounded-md hover:bg-gray-50"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
                           </button>
+
+                          {openDropdownId === categoria.id && (
+                            <div className="absolute right-0 mt-1 bg-white border border-gray-200 rounded shadow-md z-10">
+                              <Link to={`/admin/categories/${categoria.id}/edit`}>
+                                <div className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer">
+                                  <Edit className="h-4 w-4" />
+                                  Editar
+                                </div>
+                              </Link>
+                              <div
+                                onClick={() => handleDelete(categoria.id, categoria.nombre)}
+                                className="flex items-center gap-2 px-3 py-2 hover:bg-red-100 text-red-600 cursor-pointer"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                Eliminar
+                              </div>
+                            </div>
+                          )}
                         </td>
                       </tr>
                     ))}
