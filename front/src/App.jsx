@@ -4,7 +4,7 @@ import Productos from "./pages/Productos"
 import CrearProducto from "./pages/CrearProducto"
 import Categorias from "./pages/Categorias"
 import NuevaCategoria from "./pages/NuevaCategoria"
-
+import Ordenes from "./pages/Ordenes"
 
 function App() {
   
@@ -18,6 +18,7 @@ function App() {
                   <Route path="/crearProducto/productos" element={<Productos />} />
                   <Route path="/categorias" element={<Categorias />} />
                   <Route path="/categorias/nuevaCategoria" element={<NuevaCategoria />} />
+                  <Route path="/ordenes" element={<Ordenes/>}/>
                   
             </Routes>
           
