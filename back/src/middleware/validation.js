@@ -1,6 +1,9 @@
+// src/middleware/validation.js
 import { body, param, query } from 'express-validator';
 
-// Validaciones para productos
+/* ===========================
+   VALIDACIONES PARA PRODUCTOS
+=========================== */
 export const validateProductoCreate = [
   body('nombre')
     .notEmpty().withMessage('El nombre es requerido')
@@ -37,32 +40,13 @@ export const validateProductoUpdate = [
 
 export const validateProductoId = [
   param('id')
-    .isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo')
+    .isInt({ min: 1 })
+    .withMessage('El ID debe ser un número entero positivo')
 ];
 
-// Validaciones de paginación
-export const validatePagination = [
-  query('page')
-    .optional()
-    .isInt({ min: 1 }).withMessage('La página debe ser un número entero positivo'),
-  query('limit')
-    .optional()
-    .isInt({ min: 1, max: 100 }).withMessage('El límite debe ser un número entre 1 y 100')
-];
-
-// Validaciones para usuarios
-export const validateUsuarioCreate = [
-  body('nombre')
-    .notEmpty().withMessage('El nombre es requerido')
-    .isLength({ min: 2, max: 50 }).withMessage('El nombre debe tener entre 2 y 50 caracteres'),
-  body('email')
-    .isEmail().withMessage('Debe ser un email válido')
-    .normalizeEmail(),
-  body('rolId')
-    .isInt({ min: 1 }).withMessage('El rol debe ser un número entero positivo')
-];
-
-// Validaciones para categorías
+/* ===========================
+   VALIDACIONES PARA CATEGORÍAS
+=========================== */
 export const validateCategoriaCreate = [
   body('nombre')
     .notEmpty().withMessage('El nombre es requerido')
@@ -82,6 +66,76 @@ export const validateCategoriaUpdate = [
 ];
 
 export const validateCategoriaId = [
+  param('id')
+    .isInt({ min: 1 })
+    .withMessage('El ID debe ser un número entero positivo')
+];
+
+/* ===========================
+   VALIDACIONES PARA USUARIOS
+=========================== */
+export const validateUsuarioCreate = [
+  body('nombre')
+    .notEmpty().withMessage('El nombre es requerido')
+    .isLength({ min: 2, max: 50 }).withMessage('El nombre debe tener entre 2 y 50 caracteres'),
+  body('email')
+    .isEmail().withMessage('Debe ser un email válido')
+    .normalizeEmail(),
+  body('rolId')
+    .isInt({ min: 1 }).withMessage('El rol debe ser un número entero positivo')
+];
+
+export const validateUsuarioUpdate = [
+  body('nombre')
+    .optional()
+    .isLength({ min: 2, max: 50 }).withMessage('El nombre debe tener entre 2 y 50 caracteres'),
+  body('email')
+    .optional()
+    .isEmail().withMessage('Debe ser un email válido')
+    .normalizeEmail(),
+  body('rolId')
+    .optional()
+    .isInt({ min: 1 }).withMessage('El rol debe ser un número entero positivo')
+];
+
+export const validateUsuarioId = [
+  param('id')
+    .isInt({ min: 1 })
+    .withMessage('El ID debe ser un número entero positivo')
+];
+
+/* ===========================
+   VALIDACIONES DE PAGINACIÓN
+=========================== */
+export const validatePagination = [
+  query('page')
+    .optional()
+    .isInt({ min: 1 }).withMessage('La página debe ser un número entero positivo'),
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 100 }).withMessage('El límite debe ser un número entre 1 y 100')
+];
+
+// Validaciones para roles
+export const validateRolCreate = [
+  body('codigo')
+    .notEmpty().withMessage('El código es requerido')
+    .isLength({ min: 2, max: 20 }).withMessage('El código debe tener entre 2 y 10 caracteres'),
+  body('descripcion')
+    .notEmpty().withMessage('La descripción es requerida')
+    .isLength({ max: 100 }).withMessage('La descripción no puede exceder 100 caracteres')
+];
+
+export const validateRolUpdate = [
+  body('codigo')
+    .optional()
+    .isLength({ min: 2, max: 10 }).withMessage('El código debe tener entre 2 y 10 caracteres'),
+  body('descripcion')
+    .optional()
+    .isLength({ max: 100 }).withMessage('La descripción no puede exceder 100 caracteres')
+];
+
+export const validateRolId = [
   param('id')
     .isInt({ min: 1 }).withMessage('El ID debe ser un número entero positivo')
 ];

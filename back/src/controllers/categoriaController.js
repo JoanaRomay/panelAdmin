@@ -1,3 +1,4 @@
+// controllers/categoriaController.js
 import { Categoria, Producto } from "../models/index.js";
 import { Op } from "sequelize";
 import { validationResult } from "express-validator";
@@ -5,12 +6,10 @@ import { validationResult } from "express-validator";
 // Obtener todas las categorías
 export const getCategorias = async (req, res) => {
   try {
-   const { page = 1, limit = 10, activa, search, sort = "id", direction = "DESC" } = req.query;
-
+    const { page = 1, limit = 10, activa, search, sort = "id", direction = "DESC" } = req.query;
     const offset = (page - 1) * limit;
 
     const whereClause = {};
-
     if (activa !== undefined && activa !== "all") {
       whereClause.activa = activa === "true";
     }
@@ -26,7 +25,7 @@ export const getCategorias = async (req, res) => {
       where: whereClause,
       limit: parseInt(limit),
       offset: parseInt(offset),
-      order: [[sort, direction.toUpperCase()]],
+      order: [[sort, direction.toUpperCase()]]
     });
 
     res.json({
@@ -36,8 +35,8 @@ export const getCategorias = async (req, res) => {
         currentPage: parseInt(page),
         totalPages: Math.ceil(categorias.count / limit),
         totalItems: categorias.count,
-        itemsPerPage: parseInt(limit),
-      },
+        itemsPerPage: parseInt(limit)
+      }
     });
   } catch (err) {
     console.error("Error en getCategorias:", err);
@@ -65,7 +64,8 @@ export const getCategoriaById = async (req, res) => {
 export const createCategoria = async (req, res) => {
   try {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ success: false, error: "Datos inválidos", details: errors.array() });
+    if (!errors.isEmpty())
+      return res.status(400).json({ success: false, error: "Datos inválidos", details: errors.array() });
 
     const { nombre, descripcion, imagenUrl, activa } = req.body;
 
@@ -76,7 +76,7 @@ export const createCategoria = async (req, res) => {
       nombre,
       descripcion,
       imagenUrl,
-      activa: activa !== undefined ? Boolean(activa) : true,
+      activa: activa !== undefined ? Boolean(activa) : true
     });
 
     res.status(201).json({ success: true, data: nuevaCategoria, message: "Categoría creada exitosamente" });
@@ -91,7 +91,8 @@ export const updateCategoria = async (req, res) => {
   try {
     const { id } = req.params;
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ success: false, error: "Datos inválidos", details: errors.array() });
+    if (!errors.isEmpty())
+      return res.status(400).json({ success: false, error: "Datos inválidos", details: errors.array() });
 
     const categoria = await Categoria.findByPk(id);
     if (!categoria) return res.status(404).json({ success: false, error: "Categoría no encontrada" });
@@ -104,23 +105,22 @@ export const updateCategoria = async (req, res) => {
   }
 };
 
-// Eliminar categoría (soft delete)
+// Eliminar categoría
 export const deleteCategoria = async (req, res) => {
   try {
     const { id } = req.params;
     const categoria = await Categoria.findByPk(id);
     if (!categoria) return res.status(404).json({ success: false, error: "Categoría no encontrada" });
 
-      //await categoria.update({ activa: false });
-       await categoria.destroy(); // ✅ Esto borra físicamente la fila
-    res.json({ success: true, message: "Categoría desactivada exitosamente" });
+    await categoria.destroy();
+    res.json({ success: true, message: "Categoría eliminada exitosamente" });
   } catch (err) {
     console.error("Error en deleteCategoria:", err);
     res.status(500).json({ success: false, error: "Error interno del servidor" });
   }
 };
 
-// Productos por categoría
+// Obtener productos por categoría
 export const getProductosByCategoria = async (req, res) => {
   try {
     const { id } = req.params;
@@ -134,7 +134,7 @@ export const getProductosByCategoria = async (req, res) => {
       where: { idCategoria: id },
       limit: parseInt(limit),
       offset: parseInt(offset),
-      order: [["createdAt", "DESC"]],
+      order: [["fechaCreacion", "DESC"]]
     });
 
     res.json({
@@ -144,8 +144,8 @@ export const getProductosByCategoria = async (req, res) => {
         currentPage: parseInt(page),
         totalPages: Math.ceil(productos.count / limit),
         totalItems: productos.count,
-        itemsPerPage: parseInt(limit),
-      },
+        itemsPerPage: parseInt(limit)
+      }
     });
   } catch (err) {
     console.error("Error en getProductosByCategoria:", err);
