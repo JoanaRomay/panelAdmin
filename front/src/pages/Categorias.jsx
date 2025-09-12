@@ -3,14 +3,14 @@ import { useNavigate, Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import categoriaService from "../services/categoriaService";
-import { MoreHorizontal, Edit, Trash2, RotateCw} from "lucide-react";
+import { Edit, Trash2, RotateCw} from "lucide-react";
+
+
 
 function Categorias() {
   const navigate = useNavigate();
   const [categorias, setCategorias] = useState([]);
   const [search, setSearch] = useState("");
-  const [openDropdownId, setOpenDropdownId] = useState(null); // ID de la fila cuyo dropdown está abierto
-  const dropdownRef = useRef();
 
   // Traer categorías del backend
   useEffect(() => {
@@ -30,21 +30,10 @@ function Categorias() {
     navigate('/categorias/nuevaCategoria');
   };
 
-  // Abrir/cerrar dropdown
-  const toggleDropdown = (id) => {
-    setOpenDropdownId(openDropdownId === id ? null : id);
-  };
+  const irACategoriaEditar = () => {
+    navigate('/categorias/CategoriaEditar')
+  }
 
-  // Cerrar dropdown al hacer click fuera
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpenDropdownId(null);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   // Manejo de eliminar categoría
   const handleDelete = async (categoria) => {
@@ -76,21 +65,16 @@ function Categorias() {
         <main className="flex-1 bg-amber-950 p-6 overflow-y-auto">
           <div className="flex justify-between items-center">
             <h2 className="text-white text-3xl font-bold leading-none">Categorías</h2>
-            <button
-              onClick={irANuevaCategoria}
-              className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
-            >
-              <svg
-                className="h-4 w-4 mr-2"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Nueva Categoría
-            </button>
+              <div>        
+                <button onClick={irANuevaCategoria} className="inline-flex items-center px-3 py-2 mr-3 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+                   
+                            Nueva Categoría
+                </button>
+                <button onClick={irACategoriaEditar} className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+                   
+                            Editar Categoría
+                </button>              
+              </div>
           </div>
 
           <div className="space-y-6 mt-6">
@@ -130,7 +114,7 @@ function Categorias() {
                       <th className="py-3 pr-4">Descripción</th>
                       <th className="py-3 pr-4">Estado</th>
                       <th className="py-3 pr-4">Fecha Creación</th>
-                      <th className="py-3 text-right">Acciones</th>
+                      <th className="py-3 text-right">Eliminar</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
@@ -154,14 +138,8 @@ function Categorias() {
                         </td>
                         <td className="py-3 text-gray-700">{new Date(categoria.createdAt).toLocaleDateString()}</td>
                        <td className="py-3 text-right">
-  <div className="flex justify-end space-x-2">
-    <button
-            onClick={() => handleOpenModal(categoria)}
-            className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-            title="Editar"
-         >
-        <Edit className="h-5 w-5" />
-   </button>
+                    <div className="flex justify-end space-x-2">
+                            
    <button
         onClick={() => handleDelete(categoria)}
         className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"

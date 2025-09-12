@@ -6,9 +6,12 @@ import Categoria from './Categoria.js';
 import Orden from './Orden.js';
 import DetalleOrden from './DetalleOrden.js';
 
-// Producto - Categoria 1:N
-Producto.belongsTo(Categoria, { foreignKey: 'idCategoria' });
-Categoria.hasMany(Producto, { foreignKey: 'idCategoria' });
+// Producto pertenece a Categoria
+Producto.belongsTo(Categoria, { foreignKey: 'idCategoria', as: 'categoria' });
+
+// Categoria tiene muchos productos
+Categoria.hasMany(Producto, { foreignKey: 'idCategoria', as: 'productos' });
+
 
 
     

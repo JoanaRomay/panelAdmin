@@ -1,22 +1,38 @@
-import { Router } from 'express';
+import { Router } from "express";
+import { 
+  getProductos, 
+  getProductoById, 
+  createProducto, 
+  updateProducto, 
+  deleteProducto, 
+  getProductosByCategoria 
+} from "../controllers/productoController.js";
 
-import {
-  getProductos,
-  getProductoById,
-  createProducto,
-  updateProducto,
-  deleteProducto
-} from '../controllers/productoController.js';
-
+import { 
+  validateProductoCreate, 
+  validateProductoUpdate, 
+  validateProductoId, 
+  validatePagination 
+} from "../middleware/validation.js";
 
 const router = Router();
 
-router.get('/', getProductos);
-router.get('/:id', getProductoById);
-router.post('/', createProducto);
-router.put('/:id', updateProducto);
-router.delete('/:id', deleteProducto);
-router.get('/:id/mensajes', getMensajesByProducto);
-router.post('/:id/mensajes', createMensaje);
+// Listar todos los productos con paginación y búsqueda
+router.get("/", validatePagination, getProductos);
+
+// Obtener producto por ID
+router.get("/:id", validateProductoId, getProductoById);
+
+// Obtener productos por categoría
+router.get("/:id/categoria", validateProductoId, validatePagination, getProductosByCategoria);
+
+// Crear un producto
+router.post("/", validateProductoCreate, createProducto);
+
+// Actualizar un producto
+router.put("/:id", validateProductoId, validateProductoUpdate, updateProducto);
+
+// Eliminar un producto
+router.delete("/:id", validateProductoId, deleteProducto);
 
 export default router;

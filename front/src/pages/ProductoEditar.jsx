@@ -5,18 +5,21 @@ import SideBar from "../components/SideBar";
 import productoService from "../services/productoService";
 import categoriaService from "../services/categoriaService";
 
-function CrearProducto() {
+function ProductoEditar() {
   const navigate = useNavigate();
 
   const [categorias, setCategorias] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [producto, setProducto] = useState({
+    id: "",
     nombre: "",
     descripcion: "",
     precio: "",
     stock: "",
-    tipoMascota: "",
-    idCategoria: "",
+    categoriaId: "",
+    estado: "Activo",
     imagen: null,
+    imgUrl: "", // <-- guardamos la imagen actual de la BD
   });
 
   // Cargar categorías
@@ -33,7 +36,40 @@ function CrearProducto() {
     fetchCategorias();
   }, []);
 
+  // Cargar productos
+  useEffect(() => {
+    const fetchProductos = async () => {
+      try {
+        const res = await productoService.getAll({ page: 1, limit: 100 });
+        setProductos(Array.isArray(res.data?.data) ? res.data.data : []);
+      } catch (err) {
+        console.error("Error cargando productos:", err);
+        setProductos([]);
+      }
+    };
+    fetchProductos();
+  }, []);
+
   const irAtras = () => navigate("/productos");
+
+  // Al seleccionar un producto
+  const handleSelectProducto = (e) => {
+    const selectedId = e.target.value;
+    const prod = productos.find((p) => p.id === parseInt(selectedId));
+    if (prod) {
+      setProducto({
+        id: prod.id,
+        nombre: prod.nombre,
+        descripcion: prod.descripcion,
+        precio: prod.precio,
+        stock: prod.stock,
+        categoriaId: prod.idCategoria,
+        estado: "Activo",
+        imagen: null,       // no se ha seleccionado nueva imagen
+        imgUrl: prod.imgUrl, // <-- conservamos la imagen de la BD
+      });
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,38 +82,47 @@ function CrearProducto() {
       imagen: e.target.files[0] || null,
     }));
   };
-const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    await productoService.create({
+    const dataToUpdate = {
       nombre: producto.nombre,
       descripcion: producto.descripcion,
       precio: Number(producto.precio),
       stock: Number(producto.stock),
-      tipoMascota: producto.tipoMascota,
-      idCategoria: Number(producto.idCategoria),
-      imgUrl: "" // si no hay imagen
-    });
+      idCategoria: Number(producto.categoriaId),
+      estado: producto.estado,
+    };
 
-    alert("Producto creado correctamente");
+    // Solo actualizar imgUrl si subieron una nueva imagen
+    if (producto.imagen) {
+      dataToUpdate.imgUrl = producto.imagen; // si manejas file upload
+    } else if (producto.imgUrl) {
+      dataToUpdate.imgUrl = producto.imgUrl; // mantener la actual
+    }
+
+    await productoService.update(producto.id, dataToUpdate);
+
+    alert("Producto actualizado correctamente");
     navigate("/productos");
   } catch (err) {
-    console.error("Error creando producto:", err);
-    alert("No se pudo crear el producto");
+    console.error("Error actualizando producto:", err);
+    alert("No se pudo actualizar el producto");
   }
 };
+
 
   return (
     <div className="flex flex-col min-h-screen">
       <NavBar />
       <div className="flex flex-1">
         <SideBar />
-
         <main className="flex-1 bg-amber-950 p-6 overflow-y-auto">
           <div className="flex justify-between items-center">
             <h2 className="text-white text-3xl font-bold leading-none mb-10">
-              Crear producto
+              Editar producto
             </h2>
             <button
               onClick={irAtras}
@@ -91,39 +136,45 @@ const handleSubmit = async (e) => {
             <div className="grid gap-6 lg:grid-cols-3">
               {/* Columna principal */}
               <div className="lg:col-span-2 space-y-6">
-                {/* Información Básica */}
+                {/* Seleccionar Producto */}
                 <div className="bg-white p-4 rounded-2xl shadow-sm space-y-4 border mb-10 border-gray-100">
-                  <h2 className="text-lg font-semibold">Información Básica</h2>
-                  <div className="space-y-4">
-                    <input
-                      type="text"
-                      name="nombre"
-                      placeholder="Nombre del Producto"
-                      value={producto.nombre}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-lg"
-                      required
-                    />
-                    <textarea
-                      name="descripcion"
-                      placeholder="Descripción del producto"
-                      value={producto.descripcion}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-lg"
-                      rows="4"
-                      required
-                    />
-                    <input
-                      type="text"
-                      name="tipoMascota"
-                      placeholder="Tipo de mascota"
-                      value={producto.tipoMascota}
-                      onChange={handleChange}
-                      className="w-full border border-gray-300 p-2 rounded-lg"
-                      required
-                    />
-                  </div>
+                  <h2 className="text-lg font-semibold">Seleccionar Producto</h2>
+                  <select
+                    value={producto.id}
+                    onChange={handleSelectProducto}
+                    className="w-full border border-gray-300 p-2 rounded-lg"
+                  >
+                    <option value="">Seleccionar producto</option>
+                    {Array.isArray(productos) &&
+                      categorias.map((cat) => (
+                        <optgroup key={cat.id} label={cat.nombre}>
+                          {productos
+                            .filter((p) => p.idCategoria === cat.id)
+                            .map((p) => (
+                              <option key={p.id} value={p.id}>
+                                {p.nombre}
+                              </option>
+                            ))}
+                        </optgroup>
+                      ))}
+                  </select>
 
+                  <input
+                    type="text"
+                    name="nombre"
+                    placeholder="Nombre del Producto"
+                    value={producto.nombre}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-lg"
+                  />
+                  <textarea
+                    name="descripcion"
+                    placeholder="Descripción del producto"
+                    value={producto.descripcion}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-lg"
+                    rows="4"
+                  />
                 </div>
 
                 {/* Precios e Inventario */}
@@ -137,7 +188,6 @@ const handleSubmit = async (e) => {
                       value={producto.precio}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-lg"
-                      required
                     />
                     <input
                       type="number"
@@ -146,7 +196,6 @@ const handleSubmit = async (e) => {
                       value={producto.stock}
                       onChange={handleChange}
                       className="w-full border border-gray-300 p-2 rounded-lg"
-                      required
                     />
                   </div>
                 </div>
@@ -154,15 +203,14 @@ const handleSubmit = async (e) => {
 
               {/* Columna derecha */}
               <div className="space-y-6">
-                {/* Categoría */}
+                {/* Categoría y Estado */}
                 <div className="bg-white p-4 rounded-2xl shadow-sm space-y-4 border border-gray-100">
-                  <h2 className="text-lg font-semibold">Categoría</h2>
+                  <h2 className="text-lg font-semibold">Categoría y Estado</h2>
                   <select
-                    name="idCategoria"
-                    value={producto.idCategoria}
+                    name="categoriaId"
+                    value={producto.categoriaId}
                     onChange={handleChange}
                     className="w-full border border-gray-300 p-2 rounded-lg"
-                    required
                   >
                     <option value="">Seleccionar categoría</option>
                     {Array.isArray(categorias) &&
@@ -171,6 +219,17 @@ const handleSubmit = async (e) => {
                           {cat.nombre}
                         </option>
                       ))}
+                  </select>
+
+                  <select
+                    name="estado"
+                    value={producto.estado}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 p-2 rounded-lg"
+                  >
+                    <option value="Activo">Activo</option>
+                    <option value="Borrador">Borrador</option>
+                    <option value="Inactivo">Inactivo</option>
                   </select>
                 </div>
 
@@ -196,11 +255,15 @@ const handleSubmit = async (e) => {
                     >
                       Seleccionar Imagen
                     </label>
-                    {producto.imagen && (
+                    {producto.imagen ? (
                       <p className="text-xs text-gray-500 mt-2">
                         Imagen seleccionada: {producto.imagen.name}
                       </p>
-                    )}
+                    ) : producto.imgUrl ? (
+                      <p className="text-xs text-gray-500 mt-2">
+                        Imagen actual: {producto.imgUrl}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -219,7 +282,7 @@ const handleSubmit = async (e) => {
                 type="submit"
                 className="px-4 py-2 rounded-md bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold"
               >
-                Crear Producto
+                Guardar
               </button>
             </div>
           </form>
@@ -229,4 +292,4 @@ const handleSubmit = async (e) => {
   );
 }
 
-export default CrearProducto;
+export default ProductoEditar;

@@ -111,7 +111,8 @@ export const deleteCategoria = async (req, res) => {
     const categoria = await Categoria.findByPk(id);
     if (!categoria) return res.status(404).json({ success: false, error: "Categoría no encontrada" });
 
-    await categoria.update({ activa: false });
+      //await categoria.update({ activa: false });
+       await categoria.destroy(); // ✅ Esto borra físicamente la fila
     res.json({ success: true, message: "Categoría desactivada exitosamente" });
   } catch (err) {
     console.error("Error en deleteCategoria:", err);
