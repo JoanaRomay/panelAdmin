@@ -25,9 +25,7 @@ const Categoria = sequelize.define('Categoria', {
   }
 }, {
   tableName: 'categorias',
-    timestamps: true,
-   createdAt: 'createdAt', 
-  updatedAt: 'updatedAt'
+  timestamps: false   
 });
 
-export default Categoria;
+export default Categoria

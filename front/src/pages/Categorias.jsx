@@ -13,17 +13,21 @@ function Categorias() {
   const [search, setSearch] = useState("");
 
   // Traer categorías del backend
-  useEffect(() => {
-    const fetchCategorias = async () => {
-      try {
-        const res = await categoriaService.getAll({ search, activa: "all" });
-        setCategorias(res.data.data);
-      } catch (err) {
-        console.error("Error al obtener categorías:", err);
-      }
-    };
-    fetchCategorias();
-  }, [search]);
+useEffect(() => {
+  const fetchCategorias = async () => {
+    try {
+      const res = await categoriaService.getAll();
+      console.log("Respuesta del backend:", res.data); // 🔍 revisar
+      // ✅ extraemos el array real
+      setCategorias(Array.isArray(res.data?.data) ? res.data.data : []);
+    } catch (err) {
+      console.error("Error al obtener categorias:", err);
+      setCategorias([]);
+    }
+  };
+
+  fetchCategorias();
+}, []);
 
   // Maneja navegación a nueva categoría
   const irANuevaCategoria = () => {

@@ -3,6 +3,7 @@ import { Op } from "sequelize";
 import { validationResult } from "express-validator";
 
 // Obtener todos los productos con su categoría
+// Obtener todos los productos con su categoría
 export const getProductos = async (req, res) => {
   try {
     const { page = 1, limit = 10, search, sort = "id", direction = "DESC" } = req.query;
@@ -24,9 +25,12 @@ export const getProductos = async (req, res) => {
       include: [{ model: Categoria, as: "categoria", attributes: ["id", "nombre"] }],
     });
 
+    // Siempre devolver un array aunque no haya productos
+    const productosArray = productos?.rows ?? [];
+
     res.json({
       success: true,
-      data: productos.rows,
+      data: productosArray, // ✅ esto va directo al frontend
       pagination: {
         currentPage: parseInt(page),
         totalPages: Math.ceil(productos.count / limit),
@@ -36,9 +40,10 @@ export const getProductos = async (req, res) => {
     });
   } catch (err) {
     console.error("Error en getProductos:", err);
-    res.status(500).json({ success: false, error: "Error interno del servidor" });
+    res.status(500).json({ success: false, error: "Error interno del servidor", data: [] });
   }
 };
+
 
 // Obtener producto por ID con su categoría
 export const getProductoById = async (req, res) => {
