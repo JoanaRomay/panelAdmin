@@ -16,9 +16,8 @@ function Categorias() {
 useEffect(() => {
   const fetchCategorias = async () => {
     try {
-      const res = await categoriaService.getAll();
-      console.log("Respuesta del backend:", res.data); // 🔍 revisar
-      // ✅ extraemos el array real
+      const res = await categoriaService.getAll(); 
+      console.log("Respuesta del backend:", res.data); 
       setCategorias(Array.isArray(res.data?.data) ? res.data.data : []);
     } catch (err) {
       console.error("Error al obtener categorias:", err);

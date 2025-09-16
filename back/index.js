@@ -8,11 +8,12 @@ const app = express(); // 👉 primero se declara app
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://tu-dominio.com'] 
-        : ['http://localhost:5173', 'http://localhost:5174'], 
+    origin: process.env.NODE_ENV === 'production'
+        ? 'https://tu-dominio.com'
+        : 'http://localhost:5175', 
     credentials: true
-}));    
+}));
+
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
