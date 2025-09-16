@@ -7,6 +7,8 @@ import NuevaCategoria from "./pages/NuevaCategoria"
 import Ordenes from "./pages/Ordenes"
 import CategoriaEditar from "./pages/CategoriaEditar"
 import ProductoEditar from "./pages/ProductoEditar"
+import Usuarios from "./pages/Usuarios"
+
 
 function App() {
   
@@ -22,7 +24,9 @@ function App() {
                   <Route path="/categorias/nuevaCategoria" element={<NuevaCategoria />} />
                   <Route path="/ordenes" element={<Ordenes/>}/>
                   <Route path="/categorias/CategoriaEditar" element={<CategoriaEditar />} />
-                   <Route path="/productos/productoEditar" element={<ProductoEditar/>}/>
+                  <Route path="/productos/productoEditar" element={<ProductoEditar />} />
+                  <Route path="/usuarios" element={<Usuarios />} />
+
             </Routes>
           
           </BrowserRouter>
