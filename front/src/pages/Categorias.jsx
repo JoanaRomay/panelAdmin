@@ -45,7 +45,7 @@ useEffect(() => {
   if (!window.confirm(`¿Desea eliminar la categoría "${categoria.nombre}"?`)) return;
 
   try {
-    // ✅ Esto elimina en la base de datos
+    // Esto elimina en la base de datos
     await categoriaService.delete(categoria.id);
 
     // Actualiza la tabla en la UI
@@ -116,8 +116,7 @@ useEffect(() => {
                       <th className="py-3 pr-4">Nombre</th>
                       <th className="py-3 pr-4">Descripción</th>
                       <th className="py-3 pr-4">Estado</th>
-                      <th className="py-3 pr-4">Fecha Creación</th>
-                      <th className="py-3 text-right">Eliminar</th>
+                      <th className="py-3 text-right">Acciones</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
@@ -125,7 +124,7 @@ useEffect(() => {
                       <tr key={categoria.id} className="hover:bg-gray-50 relative">
                         <td className="py-3">
                           <div className="font-medium text-gray-900">{categoria.nombre}</div>
-                          <div className="text-xs text-gray-500">ID: {categoria.id}</div>
+                         
                         </td>
                         <td className="py-3 max-w-xs">
                           <div className="truncate text-gray-700">{categoria.descripcion}</div>
@@ -139,7 +138,7 @@ useEffect(() => {
                             {categoria.activa ? 'Activo' : 'Inactivo'}
                           </span>
                         </td>
-                        <td className="py-3 text-gray-700">{new Date(categoria.createdAt).toLocaleDateString()}</td>
+                       
                        <td className="py-3 text-right">
                     <div className="flex justify-end space-x-2">
                             

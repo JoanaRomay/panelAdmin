@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors({
     origin: process.env.NODE_ENV === 'production'
         ? 'https://tu-dominio.com'
-        : 'http://localhost:5175', 
+        : 'http://localhost:5173', 
     credentials: true
 }));
 
