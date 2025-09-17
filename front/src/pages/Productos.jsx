@@ -3,7 +3,7 @@ import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import { useNavigate } from "react-router-dom";
 import productoService from "../services/productoService";
-import { Trash2 } from "lucide-react";
+import { Trash2, SquarePlus, SquarePen } from "lucide-react";
 
 function Productos() {
   const navigate = useNavigate();
@@ -60,11 +60,9 @@ function Productos() {
             <h2 className="text-white text-3xl font-bold leading-none">Productos</h2>
             <div>        
               <button onClick={irACrearProducto} className="inline-flex items-center px-3 py-2 mr-3 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-                Crear Producto
+                <SquarePlus />
               </button>
-              <button onClick={irAProductoEditar} className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-                Editar Producto
-              </button>              
+                        
             </div>
           </div>
 
@@ -102,7 +100,7 @@ function Productos() {
                       <th className="py-3 pr-4">Categoría</th>
                       <th className="py-3 pr-4">Precio</th>
                       <th className="py-3 pr-4">Stock</th>
-                      <th className="py-3 text-right">Eliminar</th>
+                      <th className="py-3 text-right">Acciones</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-100">
@@ -113,7 +111,6 @@ function Productos() {
                             <img src={producto.imgUrl || 'https://via.placeholder.com/40'} alt={producto.nombre} className="h-10 w-10 rounded-md object-cover" />
                             <div className="leading-tight">
                               <div className="font-medium text-gray-900">{producto.nombre}</div>
-                              <div className="text-xs text-gray-500">ID: {producto.id}</div>
                             </div>
                           </div>
                         </td>
@@ -121,7 +118,10 @@ function Productos() {
                         <td className="py-3 text-sm text-gray-700">${producto.precio}</td>
                         <td className="py-3 text-sm text-gray-700">{producto.stock} unidades</td>
                         <td className="py-3 text-right">
-                          <div className="flex justify-end">
+                                <div className="flex justify-end">
+                                     <button  className="text-blue-600" title="Editar">
+                              <SquarePen className="h-5 w-5" />
+                            </button>
                             <button onClick={() => handleDelete(producto)} className="text-red-600 hover:text-red-900" title="Eliminar">
                               <Trash2 className="h-5 w-5" />
                             </button>

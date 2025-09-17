@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import categoriaService from "../services/categoriaService";
-import { Edit, Trash2, RotateCw} from "lucide-react";
+import { Trash2, SquarePlus, SquarePen, MoveLeft } from "lucide-react";
 
 
 
@@ -71,15 +71,26 @@ useEffect(() => {
               <div>        
                 <button onClick={irANuevaCategoria} className="inline-flex items-center px-3 py-2 mr-3 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
                    
-                            Nueva Categoría
+                            <SquarePlus />
                 </button>
-                <button onClick={irACategoriaEditar} className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
-                   
-                            Editar Categoría
-                </button>              
+                      
               </div>
           </div>
-
+         {/* Buscador */}
+          <div className="flex items-center mt-6 mb-4">
+            <div className="relative flex-1 max-w-sm">
+              <svg className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 rounded-md border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
+              />
+            </div>
+          </div>
           <div className="space-y-6 mt-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -89,24 +100,7 @@ useEffect(() => {
                     Lista completa de categorías de productos
                   </p>
                 </div>
-                <div className="relative w-80">
-                  <svg
-                    className="absolute left-2 top-2.5 h-4 w-4 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Buscar categorías..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-md border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
-                  />
-                </div>
+                
               </div>
 
               <div className="px-6 py-4 overflow-x-auto">
@@ -141,14 +135,12 @@ useEffect(() => {
                        
                        <td className="py-3 text-right">
                     <div className="flex justify-end space-x-2">
-                            
-   <button
-        onClick={() => handleDelete(categoria)}
-        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-       title="Eliminar"
-    >
-    <Trash2 className="h-5 w-5" />
-    </button>
+                        <button  className="text-blue-600" title="Editar">
+                        <SquarePen  className="h-5 w-5" />
+                    </button>       
+                    <button onClick={() => handleDelete(categoria)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" title="Eliminar">
+                        <Trash2 className="h-5 w-5" />
+                    </button>
    </div>
   </td>
 

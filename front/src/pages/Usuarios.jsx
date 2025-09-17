@@ -67,7 +67,21 @@ function Usuarios() {
               </button>
             </div>
           </div>
-
+ {/* Buscador */}
+          <div className="flex items-center mt-6 mb-4">
+            <div className="relative flex-1 max-w-sm">
+              <svg className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 rounded-md border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
+              />
+            </div>
+          </div>
           <div className="space-y-6 mt-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -77,28 +91,7 @@ function Usuarios() {
                     Lista completa de usuarios del sistema
                   </p>
                 </div>
-                <div className="relative w-80">
-                  <svg
-                    className="absolute left-2 top-2.5 h-4 w-4 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"
-                    />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Buscar usuarios..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-md border border-gray-200 bg-gray-50 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-transparent"
-                  />
-                </div>
+                
               </div>
 
               <div className="px-6 py-4 overflow-x-auto">

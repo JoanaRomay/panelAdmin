@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import productoService from "../services/productoService";
 import categoriaService from "../services/categoriaService";
-
+import {  MoveLeft } from "lucide-react";
 function CrearProducto() {
   const navigate = useNavigate();
 
@@ -83,7 +83,7 @@ const handleSubmit = async (e) => {
               onClick={irAtras}
               className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
             >
-              Atrás
+              <MoveLeft />
             </button>
           </div>
 

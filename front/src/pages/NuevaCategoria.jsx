@@ -3,7 +3,7 @@ import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import { useNavigate } from "react-router-dom";
 import categoriaService from "../services/categoriaService"; // asegúrate que la ruta es correcta
-
+import { MoveLeft } from "lucide-react";
 function NuevaCategoria() {
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ function NuevaCategoria() {
               onClick={irAtras}
               className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-semibold shadow-sm transition hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
             >
-              Atrás
+              <MoveLeft />
             </button>
           </div>
 
